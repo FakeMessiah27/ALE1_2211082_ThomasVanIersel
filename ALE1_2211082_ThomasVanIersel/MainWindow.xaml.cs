@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,31 +22,38 @@ namespace ALE1_2211082_ThomasVanIersel
     public partial class MainWindow : Window
     {
         Node firstNodeInTree;
-        GraphvizHelper gh;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            gh = new GraphvizHelper();
         }
 
         private void btnExecute_Click(object sender, RoutedEventArgs e)
         {
+            // Get the initial input from the prefix textbox and remove spaces.
             string input = tbPrefix.Text;
             input = input.Replace(" ", "");
 
+            // Create the internal tree op objects, and store the first node in the tree to keep access to it.
             firstNodeInTree = CreateTree(input);
 
+            // Create the infix version of the formula.
             string infixFormula = firstNodeInTree.ToString();
+            // Get all unique variables in the formula.
             string variables = GetVariablesFromPrefix(infixFormula);
 
+            // Apply the various outputs found above to the appropriate textboxes.
             tbInfix.Text = infixFormula;
             tbVariables.Text = variables;
 
-            gh.CreateTextFile(firstNodeInTree);
-        }
+            // Create a GraphvizHelper object and use it to create the Graph's .dot and .png files.
+            GraphvizHelper gh = new GraphvizHelper();
+            gh.CreateGraph(firstNodeInTree);
 
+            // Apply the created .png file to the image element as a bitmap.
+            graph.Source = gh.GetBitmapFromPng();
+        }
+       
         /// <summary>
         /// Takes a formula in prefix notation and returns all variables, separated by commas.
         /// </summary>
@@ -71,9 +79,6 @@ namespace ALE1_2211082_ThomasVanIersel
         /// <returns>First node of the tree.</returns>
         private Node CreateTree(string input)
         {
-            int openingBracketIndex = input.IndexOf('(');
-            int closingBracketIndex = input.LastIndexOf(')');
-
             // Create three nodes. 
             //
             // Operator node = first character (input[0]).
@@ -104,31 +109,45 @@ namespace ALE1_2211082_ThomasVanIersel
             }
             else
             {
+                // If a comma was found in the middle of the formula (in between any possible sub-formulas), divide the input string into two new strings;
+                // one for each side of the formula (the two operands).
                 leftOperand = Slice(input, 2, middleCommaPosition);
-                rightOperand = Slice(input, middleCommaPosition + 1, closingBracketIndex);
+                rightOperand = Slice(input, middleCommaPosition + 1, input.LastIndexOf(')'));
             }
+            
             
             if (leftOperand.Contains("("))
             {
+                // If an opening bracket is found, it means the operand is a formula itself, and we will use recursion to dig down to the lowest level
+                // of the formula in order to build the internal tree of objects.
                 leftNode = CreateTree(leftOperand);
             }
             else
             {
+                // Once a left operand is found that is not another sub-formula, store its characters.
                 leftNode.Characters = leftOperand;
             }
+            // Link the first found node (the operator) to its left operand as the first child.
             operatorNode.FirstChild = leftNode;
 
+            // For the right operand, first check if the operator is a negation. If so, there is no right operand.
             if (operatorNode.Characters != "~")
             {
                 Node rightNode = new Node();
+
+                // Check if the right operand is a sub-formula.
                 if (rightOperand.Contains("("))
                 {
+                    // If an opening bracket is found, it means the operand is a formula itself, and we will use recursion to dig down to the lowest level
+                    // of the formula in order to build the internal tree of objects.
                     rightNode = CreateTree(rightOperand);
                 }
                 else
                 {
+                    // Once a right operand is found that is not another sub-formula, store its characters.
                     rightNode.Characters = rightOperand;
                 }
+                // Link the first found node (the operator) to its right operand as the second child.
                 operatorNode.SecondChild = rightNode;
             }
 
@@ -165,6 +184,7 @@ namespace ALE1_2211082_ThomasVanIersel
         /// <summary>
         /// Get the string slice between the two indexes.
         /// Inclusive for start index, exclusive for end index.
+        /// Source: https://www.dotnetperls.com/string-slice
         /// </summary>
         private string Slice(string source, int start, int end)
         {
