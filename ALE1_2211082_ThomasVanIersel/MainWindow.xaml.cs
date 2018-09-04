@@ -53,6 +53,8 @@ namespace ALE1_2211082_ThomasVanIersel
             // Apply the created .png file to the image element as a bitmap.
             graph.Source = gh.GetBitmapFromPng();
         }
+
+
        
         /// <summary>
         /// Takes a formula in prefix notation and returns all variables, separated by commas.
