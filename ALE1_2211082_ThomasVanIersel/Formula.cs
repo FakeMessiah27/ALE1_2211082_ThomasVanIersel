@@ -199,9 +199,9 @@ namespace ALE1_2211082_ThomasVanIersel
             textLines.Add(topLine);
 
             // Generate lines with all possible 0/1 combinations.
-            for (int i = 0; i < (2 ^ Variables.Count - 1); i++)
-            {  
-                // Do fancy math.
+            for (int i = 0; i <= Math.Pow(2, Variables.Count) - 1; i++)
+            {
+                textLines.Add(Convert.ToString(i, 2).PadLeft(Variables.Count, '0'));
             }
 
             List<string> TESTLines = new List<string>
@@ -217,10 +217,10 @@ namespace ALE1_2211082_ThomasVanIersel
                 "1\t1\t1",
             };
 
-            for (int i = 1; i < TESTLines.Count; i++)
+            for (int i = 1; i < textLines.Count; i++)
             {
                 Dictionary<string, bool> truthValues = new Dictionary<string, bool>();
-                string cleanLine = TESTLines[i].Replace("\t", "");
+                string cleanLine = textLines[i].Replace("\t", "");
 
                 for (int j = 0; j < cleanLine.Count(); j++)
                 {
@@ -230,10 +230,10 @@ namespace ALE1_2211082_ThomasVanIersel
                         truthValues.Add(Variables[j], true);
                 }
 
-                TESTLines[i] += "\t" + GetTruthValue(FirstNode, truthValues);
+                textLines[i] += "\t" + GetTruthValue(FirstNode, truthValues);
             }
             
-            return TESTLines;
+            return textLines;
         }
 
         private bool GetTruthValue(Node node, Dictionary<string, bool> truthValues)

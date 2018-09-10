@@ -49,6 +49,7 @@ namespace ALE1_2211082_ThomasVanIersel
             // Generate truth table.
             truthTable.ItemsSource = formula.GenerateTruthTable();
 
+            // ToString("X")
             // Generate hash code from truth table.
             //lblHashCode.Content = "Hash code: " + GetHashFromTable();
         }
