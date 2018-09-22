@@ -92,7 +92,7 @@ namespace ALE1_2211082_ThomasVanIersel
             if (middleCommaPosition == 0)
             {
                 // In case of negation (or any other operator that only has one operand), take whatever is in between the brackets.
-                leftOperand = Slice(input, 2, input.IndexOf(')'));
+                leftOperand = Slice(input, 2, input.LastIndexOf(')'));
             }
             else
             {
@@ -204,33 +204,19 @@ namespace ALE1_2211082_ThomasVanIersel
                 textLines.Add(Convert.ToString(i, 2).PadLeft(Variables.Count, '0'));
             }
 
-            List<string> TESTLines = new List<string>
-            {
-                "A\tB\tC",
-                "0\t0\t0",
-                "0\t0\t1",
-                "0\t1\t0",
-                "0\t1\t1",
-                "1\t0\t0",
-                "1\t0\t1",
-                "1\t1\t0",
-                "1\t1\t1",
-            };
-
             for (int i = 1; i < textLines.Count; i++)
             {
                 Dictionary<string, bool> truthValues = new Dictionary<string, bool>();
-                string cleanLine = textLines[i].Replace("\t", "");
 
-                for (int j = 0; j < cleanLine.Count(); j++)
+                for (int j = 0; j < textLines[i].Count(); j++)
                 {
-                    if (cleanLine[j] == '0')
+                    if (textLines[i][j] == '0')
                         truthValues.Add(Variables[j], false);
                     else
                         truthValues.Add(Variables[j], true);
                 }
 
-                textLines[i] += "\t" + GetTruthValue(FirstNode, truthValues);
+                textLines[i] += Convert.ToInt32(GetTruthValue(FirstNode, truthValues));
             }
             
             return textLines;

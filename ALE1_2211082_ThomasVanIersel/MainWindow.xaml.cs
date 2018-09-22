@@ -45,18 +45,61 @@ namespace ALE1_2211082_ThomasVanIersel
 
             // Apply the created .png file to the image element as a bitmap.
             graph.Source = gh.GetBitmapFromPng();
-            
-            // Generate truth table.
-            truthTable.ItemsSource = formula.GenerateTruthTable();
 
-            // ToString("X")
+            // Generate truth table.
+            List<string> truthTableSource = formula.GenerateTruthTable();
+            truthTable.ItemsSource = AddTabs(new List<string>(truthTableSource));
+
             // Generate hash code from truth table.
-            //lblHashCode.Content = "Hash code: " + GetHashFromTable();
+            string hashValue = GetHashFromTable(truthTableSource);
+            lblHashCode.Content = "Hash code: " + hashValue;
         }
 
-        //private string GetHashFromTable()
-        //{
-            
-        //}
+        /// <summary>
+        /// Takes a list of strings and adds tabs inbetween each character of each string.
+        /// </summary>
+        /// <param name="textLines"></param>
+        /// <returns></returns>
+        private List<string> AddTabs(List<string> textLines)
+        {
+            for (int i = 1; i < textLines.Count; i++)
+            {
+                string newLine = "";
+
+                for (int j = 0; j < textLines[i].Count(); j++)
+                {
+                    newLine += textLines[i][j];
+
+                    if (j != textLines[i].Count() - 1)
+                    {
+                        newLine += "\t";
+                    }
+                }
+
+                textLines[i] = newLine;
+            }
+
+            return textLines;
+        }
+
+        private string GetHashFromTable(List<string> truthTableSource)
+        {
+            string formulaTruthValues = "";
+
+            for (int i = truthTableSource.Count - 1; i > 0; i--)
+            {
+                formulaTruthValues += truthTableSource[i].Last();
+            }
+
+            try
+            {
+                long binaryValue = Convert.ToInt64(formulaTruthValues, 2);
+                return binaryValue.ToString("X");
+            }
+            catch (OverflowException)
+            {
+                return "NUMBER TOO LARGE";
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ALE1_2211082_ThomasVanIersel"
         mc:Ignorable="d"
-        Title="ALE1_2211082_ThomasVanIersel" Height="462" Width="828.33">
+        Title="ALE1_2211082_ThomasVanIersel" Height="649" Width="1008.33">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="441*"/>
@@ -23,8 +23,8 @@
 
         <Image x:Name="graph" Height="355" Margin="14,40,10,0" VerticalAlignment="Top" Grid.Column="1"/>
         <Label Content="Graph:" HorizontalAlignment="Left" Margin="141,14,0,0" VerticalAlignment="Top" Grid.Column="1" Height="26" Width="45"/>
-        <ListBox x:Name="truthTable" Margin="10,164,0,0" Height="220" VerticalAlignment="Top" HorizontalAlignment="Left" Width="224"/>
+        <ListBox x:Name="truthTable" Margin="10,164,196,10"/>
         <Label Content="Truth table:" HorizontalAlignment="Left" Margin="10,138,0,0" VerticalAlignment="Top" Height="26" Width="69"/>
-        <Label x:Name="lblHashCode" Content="Hash code:" Margin="246,165,0,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Left" Width="79"/>
+        <Label x:Name="lblHashCode" Content="Hash code:" Margin="0,164,10,0" Height="26" VerticalAlignment="Top" HorizontalAlignment="Right" Width="186"/>
     </Grid>
 </Window>
