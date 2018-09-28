@@ -183,11 +183,16 @@ namespace ALE1_2211082_ThomasVanIersel
             return source.Substring(start, len); // Return Substring of length
         }
 
+        /// <summary>
+        /// Generates a truth table based on the internal tree of objects that make up the formula.
+        /// </summary>
+        /// <returns></returns>
         public List<string> GenerateTruthTable()
         {
             List<string> textLines = new List<string>();
             string topLine = "";
 
+            // First add the top line which has the variables on it.
             for (int i = 0; i < Variables.Count; i++)
             {
                 if (i != 0)
@@ -199,6 +204,9 @@ namespace ALE1_2211082_ThomasVanIersel
             textLines.Add(topLine);
 
             // Generate lines with all possible 0/1 combinations.
+            // By calculating the amount of variables to the power 2, you get the number of different combinations of 0 and 1 they can make.
+            // By then counting up to that number and converting each of those decimal numbers to binary, you write all possible 0/1 combinations.
+            // (For this code, I received help from Cezar Savin.)
             for (int i = 0; i <= Math.Pow(2, Variables.Count) - 1; i++)
             {
                 textLines.Add(Convert.ToString(i, 2).PadLeft(Variables.Count, '0'));
@@ -206,8 +214,10 @@ namespace ALE1_2211082_ThomasVanIersel
 
             for (int i = 1; i < textLines.Count; i++)
             {
+                // For each line, create a dictionary holding the truth values for each variable.
                 Dictionary<string, bool> truthValues = new Dictionary<string, bool>();
 
+                // Read the truth value of each variable and store it in the dictionary.
                 for (int j = 0; j < textLines[i].Count(); j++)
                 {
                     if (textLines[i][j] == '0')
@@ -216,14 +226,22 @@ namespace ALE1_2211082_ThomasVanIersel
                         truthValues.Add(Variables[j], true);
                 }
 
+                // Calculate, for this line, what the formula's outcome is, and append it onto the string to act as the final column.
                 textLines[i] += Convert.ToInt32(GetTruthValue(FirstNode, truthValues));
             }
             
             return textLines;
         }
 
+        /// <summary>
+        /// Calculates the truth value (or outcome) of the formula based on a dictionary with truth values for each variable in the formula.
+        /// </summary>
+        /// <param name="node">The first node in the internal object of trees, representing the formula.</param>
+        /// <param name="truthValues">The Dictionary holding the truth value, for each variable in the formula.</param>
+        /// <returns></returns>
         private bool GetTruthValue(Node node, Dictionary<string, bool> truthValues)
         {
+            // If this node has no further child nodes, simply return whatever truth value the variable has.
             if (node.FirstChild == null && node.SecondChild == null)
             {
                 foreach (KeyValuePair<string, bool> tv in truthValues)
@@ -236,6 +254,7 @@ namespace ALE1_2211082_ThomasVanIersel
             bool firstChildTruthValue = false;
             bool secondChildTruthValue = false;
 
+            // Use recursion to get to the bottom of the tree, on both sides.
             if (node.FirstChild != null)
             {
                 firstChildTruthValue = GetTruthValue(node.FirstChild, truthValues);
@@ -245,6 +264,7 @@ namespace ALE1_2211082_ThomasVanIersel
                 secondChildTruthValue = GetTruthValue(node.SecondChild, truthValues);
             }
 
+            // Once a leaf in the tree is found, return the truth value of this (sub-)formula
             switch (node.Characters)
             {
                 case "~":

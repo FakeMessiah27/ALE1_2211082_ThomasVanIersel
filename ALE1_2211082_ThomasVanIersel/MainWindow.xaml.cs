@@ -21,9 +21,13 @@ namespace ALE1_2211082_ThomasVanIersel
     /// </summary>
     public partial class MainWindow : Window
     {
+        QuineMcCluskeyControl qmControl;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            qmControl = new QuineMcCluskeyControl();
         }
 
         private void btnExecute_Click(object sender, RoutedEventArgs e)
@@ -47,9 +51,12 @@ namespace ALE1_2211082_ThomasVanIersel
             graph.Source = gh.GetBitmapFromPng();
 
             // Generate truth table.
-            List<string> truthTableSource = formula.GenerateTruthTable();
-            truthTable.ItemsSource = AddTabs(new List<string>(truthTableSource));
-
+            List<string> truthTableSource = AddTabs(new List<string>(formula.GenerateTruthTable()));
+            truthTable.ItemsSource = truthTableSource;
+            
+            // Generate minimised truth table.
+            tbMinimised.Text = qmControl.ProcessTruthTableString(truthTableSource);
+            
             // Generate hash code from truth table.
             string hashValue = GetHashFromTable(truthTableSource);
             lblHashCode.Content = "Hash code: " + hashValue;
@@ -82,6 +89,11 @@ namespace ALE1_2211082_ThomasVanIersel
             return textLines;
         }
 
+        /// <summary>
+        /// Generates a hexadecimal hash code based on the right most column of the truth table (the last digit of each line in the list, starting at the back).
+        /// </summary>
+        /// <param name="truthTableSource"></param>
+        /// <returns></returns>
         private string GetHashFromTable(List<string> truthTableSource)
         {
             string formulaTruthValues = "";
@@ -93,6 +105,7 @@ namespace ALE1_2211082_ThomasVanIersel
 
             try
             {
+                // Convert to binary first, then to decimal, then to hexadecimal.
                 long binaryValue = Convert.ToInt64(formulaTruthValues, 2);
                 return binaryValue.ToString("X");
             }

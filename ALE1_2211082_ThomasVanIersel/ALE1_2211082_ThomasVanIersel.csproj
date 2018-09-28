@@ -54,6 +54,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BooleanAlgebra.cs" />
+    <Compile Include="QuineMcCluskeyAlgorithm.cs" />
+    <Compile Include="TruthTable.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -62,6 +65,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="QuineMcCluskeyControl.cs" />
     <Compile Include="Formula.cs" />
     <Compile Include="GraphvizHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -71,6 +75,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Node.cs" />
+    <Compile Include="PetricksMethod.cs" />
+    <Compile Include="PrimeImplicant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
