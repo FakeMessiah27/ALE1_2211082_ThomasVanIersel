@@ -20,6 +20,8 @@ namespace ALE1_2211082_ThomasVanIersel
 
         public string HashCode { get; set; }
 
+        public List<String> TruthTable { get; set; }
+
         #endregion
         #region --------------------------------- CONSTRUCTORS -----------------------------------
 
@@ -59,6 +61,7 @@ namespace ALE1_2211082_ThomasVanIersel
             return variables.Distinct().ToList();
         }
 
+        #region Internal formula tree
         /// <summary>
         /// Creates a tree of internal objects representing a formula in infix notation.
         /// </summary>
@@ -92,14 +95,14 @@ namespace ALE1_2211082_ThomasVanIersel
             if (middleCommaPosition == 0)
             {
                 // In case of negation (or any other operator that only has one operand), take whatever is in between the brackets.
-                leftOperand = Slice(input, 2, input.LastIndexOf(')'));
+                leftOperand = Utilities.Slice(input, 2, input.LastIndexOf(')'));
             }
             else
             {
                 // If a comma was found in the middle of the formula (in between any possible sub-formulas), divide the input string into two new strings;
                 // one for each side of the formula (the two operands).
-                leftOperand = Slice(input, 2, middleCommaPosition);
-                rightOperand = Slice(input, middleCommaPosition + 1, input.LastIndexOf(')'));
+                leftOperand = Utilities.Slice(input, 2, middleCommaPosition);
+                rightOperand = Utilities.Slice(input, middleCommaPosition + 1, input.LastIndexOf(')'));
             }
 
 
@@ -167,29 +170,15 @@ namespace ALE1_2211082_ThomasVanIersel
 
             return middleCommaPosition;
         }
-
-        /// <summary>
-        /// Get the string slice between the two indexes.
-        /// Inclusive for start index, exclusive for end index.
-        /// Source: https://www.dotnetperls.com/string-slice
-        /// </summary>
-        private string Slice(string source, int start, int end)
-        {
-            if (end < 0) // Keep this for negative end support
-            {
-                end = source.Length + end;
-            }
-            int len = end - start;               // Calculate length
-            return source.Substring(start, len); // Return Substring of length
-        }
-
+        #endregion
+        #region Truth table
         /// <summary>
         /// Generates a truth table based on the internal tree of objects that make up the formula.
         /// </summary>
         /// <returns></returns>
         public List<string> GenerateTruthTable()
         {
-            List<string> textLines = new List<string>();
+            TruthTable = new List<string>();
             string topLine = "";
 
             // First add the top line which has the variables on it.
@@ -201,7 +190,7 @@ namespace ALE1_2211082_ThomasVanIersel
                 topLine += Variables[i];
             }
             topLine += "\tFormula";
-            textLines.Add(topLine);
+            TruthTable.Add(topLine);
 
             // Generate lines with all possible 0/1 combinations.
             // By calculating the amount of variables to the power 2, you get the number of different combinations of 0 and 1 they can make.
@@ -209,28 +198,28 @@ namespace ALE1_2211082_ThomasVanIersel
             // (For this code, I received help from Cezar Savin.)
             for (int i = 0; i <= Math.Pow(2, Variables.Count) - 1; i++)
             {
-                textLines.Add(Convert.ToString(i, 2).PadLeft(Variables.Count, '0'));
+                TruthTable.Add(Convert.ToString(i, 2).PadLeft(Variables.Count, '0'));
             }
 
-            for (int i = 1; i < textLines.Count; i++)
+            for (int i = 1; i < TruthTable.Count; i++)
             {
                 // For each line, create a dictionary holding the truth values for each variable.
                 Dictionary<string, bool> truthValues = new Dictionary<string, bool>();
 
                 // Read the truth value of each variable and store it in the dictionary.
-                for (int j = 0; j < textLines[i].Count(); j++)
+                for (int j = 0; j < TruthTable[i].Count(); j++)
                 {
-                    if (textLines[i][j] == '0')
+                    if (TruthTable[i][j] == '0')
                         truthValues.Add(Variables[j], false);
                     else
                         truthValues.Add(Variables[j], true);
                 }
 
                 // Calculate, for this line, what the formula's outcome is, and append it onto the string to act as the final column.
-                textLines[i] += Convert.ToInt32(GetTruthValue(FirstNode, truthValues));
+                TruthTable[i] += Convert.ToInt32(GetTruthValue(FirstNode, truthValues));
             }
             
-            return textLines;
+            return TruthTable;
         }
 
         /// <summary>
@@ -296,6 +285,48 @@ namespace ALE1_2211082_ThomasVanIersel
             return false;
         }
 
+        #endregion
+        #region Disjunctive normal form
+
+        public string GetDisjunctiveNormalForm()
+        {
+            string disjunctiveNormalForm = "";
+            List<string> trueRows = TruthTable.Where(r => r.Last() == '1').ToList();
+
+            foreach (string row in trueRows)
+            {
+                disjunctiveNormalForm += WriteAsDisjunctiveNormalForm(row);
+
+                if (row != trueRows.Last())
+                {
+                    disjunctiveNormalForm += " ⋁ ";
+                }
+            }
+
+            return disjunctiveNormalForm;
+        }
+
+        private string WriteAsDisjunctiveNormalForm(string row)
+        {
+            string disjunctiveNormalForm = "(";
+
+            for (int i = 0; i < row.Length - 1; i++)
+            {
+                if (row[i]== '1')
+                    disjunctiveNormalForm += Variables[i];
+                else
+                    disjunctiveNormalForm += String.Format("¬({0})", Variables[i]);
+
+                if (i != row.Length - 2)
+                    disjunctiveNormalForm += " ⋀ ";
+            }
+
+            disjunctiveNormalForm += ")";
+            return disjunctiveNormalForm;
+        }
+
+        #endregion
+        // End of Methods region
         #endregion
     }
 }

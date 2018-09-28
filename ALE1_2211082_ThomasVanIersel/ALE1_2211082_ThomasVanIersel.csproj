@@ -57,6 +57,7 @@
     <Compile Include="BooleanAlgebra.cs" />
     <Compile Include="QuineMcCluskeyAlgorithm.cs" />
     <Compile Include="TruthTable.cs" />
+    <Compile Include="Utilities.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

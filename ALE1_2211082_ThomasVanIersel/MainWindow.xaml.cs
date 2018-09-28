@@ -53,13 +53,16 @@ namespace ALE1_2211082_ThomasVanIersel
             // Generate truth table.
             List<string> truthTableSource = AddTabs(new List<string>(formula.GenerateTruthTable()));
             truthTable.ItemsSource = truthTableSource;
-            
-            // Generate minimised truth table.
-            tbMinimised.Text = qmControl.ProcessTruthTableString(truthTableSource);
-            
+
             // Generate hash code from truth table.
             string hashValue = GetHashFromTable(truthTableSource);
             lblHashCode.Content = "Hash code: " + hashValue;
+
+            // Generate minimised truth table.
+            tbMinimised.Text = qmControl.ProcessTruthTableString(truthTableSource);
+
+            // Generate Disjunctive normal form.
+            tbDisNormal.Text = formula.GetDisjunctiveNormalForm();
         }
 
         /// <summary>

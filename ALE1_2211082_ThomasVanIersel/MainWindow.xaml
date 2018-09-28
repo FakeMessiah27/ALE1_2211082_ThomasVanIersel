@@ -21,14 +21,16 @@
                 <Grid Background="#FFE5E5E5">
                     <Label Content="Infix:" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-1.092,-3.829" Height="26" Width="35" Margin="0,5,0,0"/>
                     <Label Content="Variables:" HorizontalAlignment="Left" Margin="0,30,0,0" VerticalAlignment="Top" Height="26" Width="60"/>
-                    <TextBox x:Name="tbInfix" Height="23" Margin="77,5,10,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.478"/>
-                    <TextBox x:Name="tbVariables" Height="23" Margin="77,33,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <TextBox x:Name="tbInfix" Height="23" Margin="65,5,10,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.478"/>
+                    <TextBox x:Name="tbVariables" Height="23" Margin="65,33,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <Label Content="Disjunctive normal form:" HorizontalAlignment="Left" Margin="0,61,0,0" VerticalAlignment="Top" Height="26" Width="143"/>
+                    <TextBox x:Name="tbDisNormal" Height="23" Margin="5,89,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Graph" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
                 <Grid Background="#FFE5E5E5">
                     <Image x:Name="graph" Height="363" Margin="0,26,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="525"/>
-                    <Label Content="Graph:" HorizontalAlignment="Left" Margin="186,0,0,0" VerticalAlignment="Top" Height="26" Width="45"/>
+                    <Label Content="Graph:" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="45"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Truth table">
@@ -41,7 +43,7 @@
             <TabItem Header="Simplify" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
                 <Grid Background="#FFE5E5E5">
                     <TextBox x:Name="tbMinimised" Margin="10,25,10,10" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
-                    <Label Content="Simplified:" HorizontalAlignment="Left" Margin="0,1,0,0" VerticalAlignment="Top" Height="26" Width="68"/>
+                    <Label Content="Simplified:" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="68"/>
                 </Grid>
             </TabItem>
         </TabControl>
