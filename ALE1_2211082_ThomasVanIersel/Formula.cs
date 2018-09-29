@@ -288,6 +288,10 @@ namespace ALE1_2211082_ThomasVanIersel
         #endregion
         #region Disjunctive normal form
 
+        /// <summary>
+        /// Generates the disjunctive normal form of the formula using the pre-calculated truth table.
+        /// </summary>
+        /// <returns>Disjunctive normal form of the formula in infix notation.</returns>
         public string GetDisjunctiveNormalForm()
         {
             string disjunctiveNormalForm = "";
@@ -306,6 +310,11 @@ namespace ALE1_2211082_ThomasVanIersel
             return disjunctiveNormalForm;
         }
 
+        /// <summary>
+        /// Takes one row of the truth table and converts it to its disjunctive normal form.
+        /// </summary>
+        /// <param name="row"></param>
+        /// <returns></returns>
         private string WriteAsDisjunctiveNormalForm(string row)
         {
             string disjunctiveNormalForm = "(";
