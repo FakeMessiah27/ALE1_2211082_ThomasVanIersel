@@ -296,14 +296,26 @@ namespace ALE1_2211082_ThomasVanIersel
         {
             string disjunctiveNormalForm = "";
             List<string> trueRows = TruthTable.Where(r => r.Last() == '1').ToList();
-
+            
             foreach (string row in trueRows)
             {
-                disjunctiveNormalForm += WriteAsDisjunctiveNormalForm(row);
-
                 if (row != trueRows.Last())
                 {
-                    disjunctiveNormalForm += " ⋁ ";
+                    disjunctiveNormalForm += "|(";
+                }
+
+                disjunctiveNormalForm += WriteAsDisjunctiveNormalForm(row);
+                
+                if (row != trueRows.Last())
+                {
+                    disjunctiveNormalForm += ",";
+                }
+                else
+                {
+                    for (int i = 1; i < trueRows.Count; i++)
+                    {
+                        disjunctiveNormalForm += ")";
+                    }
                 }
             }
 
@@ -317,17 +329,17 @@ namespace ALE1_2211082_ThomasVanIersel
         /// <returns></returns>
         private string WriteAsDisjunctiveNormalForm(string row)
         {
-            string disjunctiveNormalForm = "(";
+            string disjunctiveNormalForm = "&(";
 
             for (int i = 0; i < row.Length - 1; i++)
             {
                 if (row[i]== '1')
                     disjunctiveNormalForm += Variables[i];
                 else
-                    disjunctiveNormalForm += String.Format("¬({0})", Variables[i]);
+                    disjunctiveNormalForm += String.Format("~({0})", Variables[i]);
 
                 if (i != row.Length - 2)
-                    disjunctiveNormalForm += " ⋀ ";
+                    disjunctiveNormalForm += ", ";
             }
 
             disjunctiveNormalForm += ")";

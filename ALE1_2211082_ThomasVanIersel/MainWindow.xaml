@@ -24,7 +24,7 @@
                     <TextBox x:Name="tbInfix" Height="23" Margin="65,5,10,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.478"/>
                     <TextBox x:Name="tbVariables" Height="23" Margin="65,33,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
                     <Label Content="Disjunctive normal form:" HorizontalAlignment="Left" Margin="0,61,0,0" VerticalAlignment="Top" Height="26" Width="143"/>
-                    <TextBox x:Name="tbDisNormal" Height="23" Margin="5,89,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <TextBox x:Name="tbDisNormal" Height="80" Margin="5,89,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Graph" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
@@ -37,7 +37,7 @@
                 <Grid Background="#FFE5E5E5">
                     <ListBox x:Name="truthTable" Margin="10,25,10,10"/>
                     <Label Content="Truth table:" HorizontalAlignment="Left" Margin="10,-1,0,0" VerticalAlignment="Top" Height="26" Width="69"/>
-                    <Label x:Name="lblHashCode" Content="Hash code:" Margin="314,25,78,427"/>
+                    <Label x:Name="lblHashCode" Content="Hash code:" Margin="313,0,79,372"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Simplify" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
