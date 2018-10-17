@@ -278,6 +278,10 @@ namespace ALE1_2211082_ThomasVanIersel
                     if (firstChildTruthValue == true || secondChildTruthValue == true)
                         return true;
                     break;
+                case "%":
+                    if (firstChildTruthValue == false || secondChildTruthValue == false)
+                        return true;
+                    break;
                 default:
                     break;
             }
@@ -344,6 +348,58 @@ namespace ALE1_2211082_ThomasVanIersel
 
             disjunctiveNormalForm += ")";
             return disjunctiveNormalForm;
+        }
+
+        #endregion
+        #region Nandified form
+
+        /// <summary>
+        /// Generates the nandified form of the formula.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public string GetNandifiedForm(Node node)
+        {
+            string nandifiedForm = "";
+
+            string firstChildVariable = "";
+            string secondChildVariable = "";
+
+            // Use recursion to get to the bottom of the tree, on both sides.
+            if (node.FirstChild != null)
+            {
+                firstChildVariable = GetNandifiedForm(node.FirstChild);
+            }
+            if (node.SecondChild != null)
+            {
+                secondChildVariable = GetNandifiedForm(node.SecondChild);
+            }
+            
+            // Convert to nandified form, based on the operator.
+            switch (node.Characters)
+            {
+                case "~":
+                    nandifiedForm = String.Format("%({0},{0})", firstChildVariable);
+                    break;
+                case ">":
+                    nandifiedForm = String.Format("%({0},%({1},{1}))", firstChildVariable, secondChildVariable);
+                    break;
+                case "=":
+                    nandifiedForm = String.Format("%(%(%({0},{0}),%({1},{1})),%({0},{1}))", firstChildVariable, secondChildVariable);
+                    break;
+                case "&":
+                    nandifiedForm = String.Format("%(%({0},{1}),%({0},{1}))", firstChildVariable, secondChildVariable);
+                    break;
+                case "|":
+                    nandifiedForm = String.Format("%(%({0},{0}),%({1},{1}))", firstChildVariable, secondChildVariable);
+                    break;
+                default:
+                    // If the current node is a leaf, it does not have an operator but a variable, which needs to be returned 
+                    // to the previous iteration of the recursive loop.
+                    return node.Characters;
+            }
+
+            return nandifiedForm;
         }
 
         #endregion

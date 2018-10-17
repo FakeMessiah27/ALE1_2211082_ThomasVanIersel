@@ -25,19 +25,29 @@
                     <TextBox x:Name="tbVariables" Height="23" Margin="65,33,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
                     <Label Content="Disjunctive normal form:" HorizontalAlignment="Left" Margin="0,61,0,0" VerticalAlignment="Top" Height="26" Width="143"/>
                     <TextBox x:Name="tbDisNormal" Height="80" Margin="5,89,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <Label Content="Nandified form:" HorizontalAlignment="Left" Margin="0,174,0,0" VerticalAlignment="Top" Height="26" Width="143"/>
+                    <TextBox x:Name="tbNandified" Height="189" Margin="5,200,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Graph" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
                 <Grid Background="#FFE5E5E5">
-                    <Image x:Name="graph" Height="363" Margin="0,26,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="525"/>
+                    <local:ZoomBorder x:Name="border" ClipToBounds="True">
+                        <Image x:Name="graph" Height="363" Margin="0,26,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="525"/>
+                    </local:ZoomBorder>
                     <Label Content="Graph:" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="45"/>
+                    <Label Content="Help" HorizontalAlignment="Left" Margin="500,0,0,0" VerticalAlignment="Top" Height="26" Width="35" ToolTip="Use scroll wheel to zoom, left click and drag to pan, right click to reset."/>
                 </Grid>
             </TabItem>
             <TabItem Header="Truth table">
                 <Grid Background="#FFE5E5E5">
-                    <ListBox x:Name="truthTable" Margin="10,25,10,10"/>
-                    <Label Content="Truth table:" HorizontalAlignment="Left" Margin="10,-1,0,0" VerticalAlignment="Top" Height="26" Width="69"/>
-                    <Label x:Name="lblHashCode" Content="Hash code:" Margin="313,0,79,372"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="61*"/>
+                        <ColumnDefinition Width="484*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox x:Name="truthTable" Margin="10,25,10,10" Grid.ColumnSpan="2"/>
+                    <Label Content="Truth table:" HorizontalAlignment="Left" Margin="10,-1,0,0" VerticalAlignment="Top" Height="26" Width="69" Grid.ColumnSpan="2"/>
+                    <Label x:Name="lblHashCode" Content="Hash code:" Margin="81,0,250,372" Grid.Column="1"/>
+                    <Label x:Name="lblHashCode_Copy" Content="Previous hash code:" Margin="234,0,97,372" Grid.Column="1"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Simplify" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">

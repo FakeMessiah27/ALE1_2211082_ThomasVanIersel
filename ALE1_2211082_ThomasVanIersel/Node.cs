@@ -35,13 +35,23 @@ namespace ALE1_2211082_ThomasVanIersel
                 case "|":
                     op = "⋁";
                     break;
+                case "%":
+                    op = "%";
+                    break;
                 default:
                     return Characters;
             }
 
             if (FirstChild != null && SecondChild != null)
             {
-                return String.Format("({0}{1}{2})", FirstChild.ToString(), op, SecondChild.ToString());
+                if (op == "%")
+                {
+                    return String.Format("(~({0}⋀{1}))", FirstChild.ToString(), SecondChild.ToString());
+                }
+                else
+                {
+                    return String.Format("({0}{1}{2})", FirstChild.ToString(), op, SecondChild.ToString());
+                }
             }
             else if (FirstChild != null)
             {
@@ -52,5 +62,35 @@ namespace ALE1_2211082_ThomasVanIersel
                 return op;
             }
         }
+
+        //public string ToNandifiedString()
+        //{
+        //    string op = "";
+
+        //    switch (Characters)
+        //    {
+        //        case "~":
+                    
+        //            break;
+        //        case ">":
+                    
+        //            break;
+        //        case "=":
+                    
+        //            break;
+        //        case "&":
+                    
+        //            break;
+        //        case "|":
+                    
+        //            break;
+        //        default:
+        //            return Characters;
+        //    }
+
+
+
+            
+        //}
     }
 }

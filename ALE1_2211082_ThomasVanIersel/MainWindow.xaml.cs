@@ -63,6 +63,16 @@ namespace ALE1_2211082_ThomasVanIersel
 
             // Generate Disjunctive normal form.
             tbDisNormal.Text = formula.GetDisjunctiveNormalForm();
+
+            // Generate Nandified form.
+            if (formula.FirstNode.Characters == "%")
+            {
+                tbNandified.Text = input;
+            }
+            else
+            {
+                tbNandified.Text = formula.GetNandifiedForm(formula.FirstNode);
+            }
         }
 
         /// <summary>
