@@ -16,13 +16,13 @@ namespace ALE1_2211082_ThomasVanIersel
         public string DotProcessFileName { get; set; }
 
         public GraphvizHelper()
-        {
-            // Create a new unique datetimeSeed to act as a filename each time a new helper is created.
-            datetimeSeed = CreateDatetimeSeed();
-        }
+        { }
 
         public bool CreateGraph(Node firstNodeInTree)
         {
+            // Create a new unique datetimeSeed to act as a filename each time a new helper is created.
+            datetimeSeed = CreateDatetimeSeed();
+
             // Get the path to application's directory.
             string currentDirectoryPath = Directory.GetCurrentDirectory();
 

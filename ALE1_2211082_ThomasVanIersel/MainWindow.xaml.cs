@@ -58,8 +58,9 @@ namespace ALE1_2211082_ThomasVanIersel
             else
             {
                 // If the graph was not created successfully, the system could not find GraphViz' "dot.exe".
-                lblGraph.Content = "Couldn't find GraphViz' \"dot.exe\"! Please ensure you have it installed on your computer and have your PATH variables set up correctly.\n\n" +
-                    "Alternatively, use the button to the right to set the path to your GraphViz  \"dot.exe\".";
+                string errorMessage = "Couldn't find GraphViz' \"dot.exe\"! Please ensure you have it installed on your computer and have your PATH variables set up correctly.\n\n" +
+                    "Alternatively, use the button on the Graph tab to set the path to your GraphViz  \"dot.exe\".";
+                System.Windows.MessageBox.Show(errorMessage, "Error!");
             }
             
             // Generate truth table.
@@ -91,6 +92,7 @@ namespace ALE1_2211082_ThomasVanIersel
         {
             using (var ofd = new OpenFileDialog())
             {
+                ofd.Title = "Select your GraphViz dot.exe";
                 DialogResult result = ofd.ShowDialog();
 
                 if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(ofd.FileName))
