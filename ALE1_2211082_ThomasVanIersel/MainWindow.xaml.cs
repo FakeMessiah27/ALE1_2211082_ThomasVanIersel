@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Forms;
 
 namespace ALE1_2211082_ThomasVanIersel
 {
@@ -22,12 +23,14 @@ namespace ALE1_2211082_ThomasVanIersel
     public partial class MainWindow : Window
     {
         QuineMcCluskeyControl qmControl;
+        GraphvizHelper gh;
 
         public MainWindow()
         {
             InitializeComponent();
 
             qmControl = new QuineMcCluskeyControl();
+            gh = new GraphvizHelper();
         }
 
         private void btnExecute_Click(object sender, RoutedEventArgs e)
@@ -44,12 +47,21 @@ namespace ALE1_2211082_ThomasVanIersel
             tbVariables.Text = String.Join(",", formula.Variables);
 
             // Create a GraphvizHelper object and use it to create the Graph's .dot and .png files.
-            GraphvizHelper gh = new GraphvizHelper();
-            gh.CreateGraph(formula.FirstNode);
+            
+            bool graphCreated = gh.CreateGraph(formula.FirstNode);
 
-            // Apply the created .png file to the image element as a bitmap.
-            graph.Source = gh.GetBitmapFromPng();
-
+            if (graphCreated == true)
+            {
+                // Apply the created .png file to the image element as a bitmap.
+                graph.Source = gh.GetBitmapFromPng();
+            }
+            else
+            {
+                // If the graph was not created successfully, the system could not find GraphViz' "dot.exe".
+                lblGraph.Content = "Couldn't find GraphViz' \"dot.exe\"! Please ensure you have it installed on your computer and have your PATH variables set up correctly.\n\n" +
+                    "Alternatively, use the button to the right to set the path to your GraphViz  \"dot.exe\".";
+            }
+            
             // Generate truth table.
             List<string> truthTableSource = AddTabs(new List<string>(formula.GenerateTruthTable()));
             truthTable.ItemsSource = truthTableSource;
@@ -72,6 +84,19 @@ namespace ALE1_2211082_ThomasVanIersel
             else
             {
                 tbNandified.Text = formula.GetNandifiedForm(formula.FirstNode);
+            }
+        }
+
+        private void btnSetPath_Click(object sender, RoutedEventArgs e)
+        {
+            using (var ofd = new OpenFileDialog())
+            {
+                DialogResult result = ofd.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(ofd.FileName))
+                {
+                    gh.DotProcessFileName = ofd.FileName;
+                }
             }
         }
 

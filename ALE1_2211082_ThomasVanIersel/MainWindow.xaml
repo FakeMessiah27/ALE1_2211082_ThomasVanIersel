@@ -11,14 +11,14 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Button x:Name="btnExecute" Content="Execute&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btnExecute_Click"/>
+        <Button x:Name="btnExecute" Content="Execute&#xD;&#xA;" HorizontalAlignment="Left" Margin="10,54,0,0" VerticalAlignment="Top" Width="75" Height="23" Click="btnExecute_Click" IsDefault="True"/>
         <TextBox x:Name="tbPrefix" Height="23" Margin="10,26,12,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="=( &gt;(A,B), |( ~(A) , =( B, &gt;( C, D ) )) )"/>
 
 
         <Label Content="Formula (as prefix):" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="110"/>
         <TabControl Height="427" Margin="10,82,12,0" VerticalAlignment="Top">
             <TabItem Header="Different notations">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="LightBlue">
                     <Label Content="Infix:" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-1.092,-3.829" Height="26" Width="35" Margin="0,5,0,0"/>
                     <Label Content="Variables:" HorizontalAlignment="Left" Margin="0,30,0,0" VerticalAlignment="Top" Height="26" Width="60"/>
                     <TextBox x:Name="tbInfix" Height="23" Margin="65,5,10,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.478"/>
@@ -30,16 +30,17 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Graph" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="LightBlue">
                     <local:ZoomBorder x:Name="border" ClipToBounds="True">
                         <Image x:Name="graph" Height="363" Margin="0,26,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="525"/>
                     </local:ZoomBorder>
-                    <Label Content="Graph:" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="45"/>
-                    <Label Content="Help" HorizontalAlignment="Left" Margin="500,0,0,0" VerticalAlignment="Top" Height="26" Width="35" ToolTip="Use scroll wheel to zoom, left click and drag to pan, right click to reset."/>
+                    <Label x:Name="lblGraph" Content="Graph:" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="45"/>
+                    <Label Content="Help" HorizontalAlignment="Left" Margin="261,0,0,0" VerticalAlignment="Top" Height="26" Width="35" ToolTip="Use scroll wheel to zoom, left click and drag to pan, right click to reset."/>
+                    <Button x:Name="btnSetPath" Content="Set GraphViz path" HorizontalAlignment="Left" Margin="431,1,0,0" VerticalAlignment="Top" Width="104" Height="23" Click="btnSetPath_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Truth table">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="LightBlue">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="61*"/>
                         <ColumnDefinition Width="484*"/>
@@ -51,11 +52,12 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Simplify" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="LightBlue">
                     <TextBox x:Name="tbMinimised" Margin="10,25,10,10" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
                     <Label Content="Simplified:" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="68"/>
                 </Grid>
             </TabItem>
         </TabControl>
+
     </Grid>
 </Window>

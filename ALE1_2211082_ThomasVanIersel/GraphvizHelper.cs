@@ -13,13 +13,15 @@ namespace ALE1_2211082_ThomasVanIersel
     {
         string datetimeSeed;
 
+        public string DotProcessFileName { get; set; }
+
         public GraphvizHelper()
         {
             // Create a new unique datetimeSeed to act as a filename each time a new helper is created.
             datetimeSeed = CreateDatetimeSeed();
         }
 
-        public void CreateGraph(Node firstNodeInTree)
+        public bool CreateGraph(Node firstNodeInTree)
         {
             // Get the path to application's directory.
             string currentDirectoryPath = Directory.GetCurrentDirectory();
@@ -49,21 +51,38 @@ namespace ALE1_2211082_ThomasVanIersel
             }
 
             // Create a png file from the above created .dot graph file.
-            CreatePng(currentDirectoryPath);
+            return CreatePng(currentDirectoryPath);
         }
 
         /// <summary>
         /// Creates a PNG image from a .dot file using the Graphviz application.
         /// </summary>
         /// <param name="currentDirectoryPath">Path to the folder containing the .dot file. This will also be the destination for the newly created image.</param>
-        private void CreatePng(string currentDirectoryPath)
+        private bool CreatePng(string currentDirectoryPath)
         {
             Process dot = new Process();
-            dot.StartInfo.FileName = @"dot.exe";
+
+            if (String.IsNullOrWhiteSpace(DotProcessFileName) == false)
+            {
+                dot.StartInfo.FileName = DotProcessFileName;
+            }
+            else
+            {
+                dot.StartInfo.FileName = @"dot.exe";
+            }
+            
             dot.StartInfo.Arguments = String.Format("-Tpng -o{0}.png {0}.dot", currentDirectoryPath + "\\" + datetimeSeed);
 
-            dot.Start();
-            dot.WaitForExit();
+            try
+            {
+                dot.Start();
+                dot.WaitForExit();
+                return true;
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>
