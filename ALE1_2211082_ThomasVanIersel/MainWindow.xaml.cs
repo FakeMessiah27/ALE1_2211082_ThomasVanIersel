@@ -93,6 +93,7 @@ namespace ALE1_2211082_ThomasVanIersel
             using (var ofd = new OpenFileDialog())
             {
                 ofd.Title = "Select your GraphViz dot.exe";
+                ofd.Filter = "exe files (*.exe)|*.exe";
                 DialogResult result = ofd.ShowDialog();
 
                 if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(ofd.FileName))

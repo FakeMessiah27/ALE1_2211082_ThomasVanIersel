@@ -64,7 +64,10 @@ namespace ALE1_2211082_ThomasVanIersel
 
             if (String.IsNullOrWhiteSpace(DotProcessFileName) == false)
             {
-                dot.StartInfo.FileName = DotProcessFileName;
+                if (DotProcessFileName.Contains("dot.exe") == true)
+                    dot.StartInfo.FileName = DotProcessFileName;
+                else
+                    return false;
             }
             else
             {

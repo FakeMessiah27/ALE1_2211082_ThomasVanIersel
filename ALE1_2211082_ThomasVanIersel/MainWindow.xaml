@@ -32,7 +32,7 @@
             <TabItem Header="Graph" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
                 <Grid Background="LightBlue">
                     <local:ZoomBorder x:Name="border" ClipToBounds="True">
-                        <Image x:Name="graph" Height="363" Margin="0,26,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="525"/>
+                        <Image x:Name="graph" Height="359" Margin="0,30,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="525"/>
                     </local:ZoomBorder>
                     <Label x:Name="lblGraph" Content="Graph:" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="45"/>
                     <Label Content="Help" HorizontalAlignment="Left" Margin="261,0,0,0" VerticalAlignment="Top" Height="26" Width="35" ToolTip="Use scroll wheel to zoom, left click and drag to pan, right click to reset."/>
