@@ -1,18 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Forms;
 
 namespace ALE1_2211082_ThomasVanIersel
@@ -22,32 +14,49 @@ namespace ALE1_2211082_ThomasVanIersel
     /// </summary>
     public partial class MainWindow : Window
     {
-        QuineMcCluskeyControl qmControl;
         GraphvizHelper gh;
+        string previousHashValue;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            qmControl = new QuineMcCluskeyControl();
+            
             gh = new GraphvizHelper();
+            previousHashValue = null;
         }
-
+        
         private void btnExecute_Click(object sender, RoutedEventArgs e)
         {
+            // Disable controls.
+            DisableControls();
+            // Select the first tab.
+            this.Dispatcher.BeginInvoke((Action)(() => tcMain.SelectedIndex = 0));
+
             // Get the initial input from the prefix textbox and remove spaces.
             string input = tbPrefix.Text;
+
+            // Don't do anything if the textbox is empty.
+            if (String.IsNullOrWhiteSpace(input))
+                return;
+
+            // Remove spaces.
             input = input.Replace(" ", "");
 
             // Create Formula object to hold the formula.
             Formula formula = new Formula(input);
 
+            // Show an error message if something goes wrong trying to read the formula.
+            if (formula.FirstNode == null)
+            {
+                System.Windows.MessageBox.Show("Something went wrong while trying to read the formula. Please ensure it is in a syntactically correct prefix notation.", "Error!");
+                return;
+            }
+
             // Apply the various outputs found above to the appropriate textboxes.
             tbInfix.Text = formula.InfixNotation;
             tbVariables.Text = String.Join(",", formula.Variables);
 
-            // Create a GraphvizHelper object and use it to create the Graph's .dot and .png files.
-            
+            // Use the GraphvizHelper object to generate the graph and display it in the ui.
             bool graphCreated = gh.CreateGraph(formula.FirstNode);
 
             if (graphCreated == true)
@@ -62,17 +71,35 @@ namespace ALE1_2211082_ThomasVanIersel
                     "Alternatively, use the button on the Graph tab to set the path to your GraphViz  \"dot.exe\".";
                 System.Windows.MessageBox.Show(errorMessage, "Error!");
             }
-            
+
             // Generate truth table.
             List<string> truthTableSource = AddTabs(new List<string>(formula.GenerateTruthTable()));
             truthTable.ItemsSource = truthTableSource;
 
             // Generate hash code from truth table.
             string hashValue = GetHashFromTable(truthTableSource);
-            lblHashCode.Content = "Hash code: " + hashValue;
+            
+            // Set the hash code labels.
+            if (previousHashValue != null)
+            {
+                lblPreviousHashCode.Content = "Previous hash code:\t" + previousHashValue;
+            }
+            lblHashCode.Content = "Hash code:\t\t" + hashValue;
+            previousHashValue = hashValue;
 
             // Generate minimised truth table.
-            tbMinimised.Text = qmControl.ProcessTruthTableString(truthTableSource);
+            Task.Factory.StartNew(() => 
+            {
+                QuineMcCluskeyControl qmControl = new QuineMcCluskeyControl();
+                string simplifiedTable = qmControl.ProcessTruthTableString(truthTableSource);
+                this.Dispatcher.Invoke(() =>
+                {
+                    tbMinimised.Text = simplifiedTable;
+                    tabItemSimplify.IsEnabled = true;
+                });
+            });
+
+            //tbMinimised.Text = qmControl.ProcessTruthTableString(truthTableSource);
 
             // Generate Disjunctive normal form.
             tbDisNormal.Text = formula.GetDisjunctiveNormalForm();
@@ -86,6 +113,9 @@ namespace ALE1_2211082_ThomasVanIersel
             {
                 tbNandified.Text = formula.GetNandifiedForm(formula.FirstNode);
             }
+
+            // Re-enable the execute button.
+            btnExecute.IsEnabled = true;
         }
 
         private void btnSetPath_Click(object sender, RoutedEventArgs e)
@@ -154,6 +184,40 @@ namespace ALE1_2211082_ThomasVanIersel
             {
                 return "NUMBER TOO LARGE";
             }
+        }
+
+        /// <summary>
+        /// Disables the simplify tabitem and the execute button.
+        /// </summary>
+        private void DisableControls()
+        {
+            tabItemSimplify.IsEnabled = false;
+
+            btnExecute.IsEnabled = false;
+        }
+
+        private void btnHelp_Click(object sender, RoutedEventArgs e)
+        {
+            string helpMessage = "For this application, a valid formula must adhere to the following rules:";
+            helpMessage += "\n\n";
+            helpMessage += "\n- The numbers of opening and closing brackets must match.";
+            helpMessage += "\n- An opening bracket must be preceded by a valid operator (see below).";
+            helpMessage += "\n- The formula must have at least one operator.";
+            helpMessage += "\n- The formula must have at least one variable.";
+            helpMessage += "\n- Variables cannot be whitespace";
+            helpMessage += "\n- The negation operator requires brackets.";
+            helpMessage += "\n\t- Good: \t\"~(A)\"";
+            helpMessage += "\n\t- Bad: \t\"~A\"";
+            helpMessage += "\n\n";
+            helpMessage += "\n Valid operators:";
+            helpMessage += "\n\t- Negation (NOT): \t\t\"~\"";
+            helpMessage += "\n\t- Implication: \t\t\">\"";
+            helpMessage += "\n\t- Biconditional (XNOR): \t\"=\"";
+            helpMessage += "\n\t- Conjunction (AND): \t\"&\"";
+            helpMessage += "\n\t- Disjunction (OR): \t\"|\"";
+            helpMessage += "\n\t- Not And (NAND): \t\"%\"";
+
+            System.Windows.MessageBox.Show(helpMessage, "Help");
         }
     }
 }

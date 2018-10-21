@@ -150,10 +150,17 @@ namespace ALE1_2211082_ThomasVanIersel
             var imageUri = new Uri(Directory.GetCurrentDirectory() + "\\" + datetimeSeed + ".png");
             var bitmap = new BitmapImage();
 
-            bitmap.BeginInit();
-            bitmap.UriSource = imageUri;
-            bitmap.EndInit();
-
+            try
+            {
+                bitmap.BeginInit();
+                bitmap.UriSource = imageUri;
+                bitmap.EndInit();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            
             return bitmap;
         }
     }

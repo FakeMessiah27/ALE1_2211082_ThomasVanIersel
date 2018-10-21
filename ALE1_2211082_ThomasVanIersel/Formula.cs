@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ALE1_2211082_ThomasVanIersel
 {
-    class Formula
+    public class Formula
     {
         #region ---------------------------------- PROPERTIES ------------------------------------
 
@@ -25,23 +26,88 @@ namespace ALE1_2211082_ThomasVanIersel
         #endregion
         #region --------------------------------- CONSTRUCTORS -----------------------------------
 
+        // Empty contructor for unit testing.
+        public Formula() { }
+
         public Formula(string prefixNotation)
         {
             PrefixNotation = prefixNotation ?? throw new ArgumentNullException(nameof(prefixNotation));
 
             // Get all unique variables in the formula.
-            Variables = GetVariablesFromPrefix(PrefixNotation);
+            //Variables = GetVariablesFromPrefix(PrefixNotation);
+            Variables = new List<string>();
+            
+            try
+            {
+                if (FormulaIsValid(prefixNotation))
+                {
+                    // Generate the tree and store its first node.
+                    FirstNode = CreateTree(PrefixNotation);
 
-            // Generate the tree and store its first node.
-            FirstNode = CreateTree(PrefixNotation);
+                    // Get all unique variables.
+                    Variables.Sort();
+                    Variables = Variables.Distinct().ToList();
 
-            // Create the infix version of the formula.
-            InfixNotation = FirstNode.ToString();
+                    if (Variables.Count == 0)
+                    {
+                        FirstNode = null;
+                    }
+
+                    // Create the infix version of the formula.
+                    InfixNotation = FirstNode.ToString();
+                }
+                else
+                {
+                    FirstNode = null;
+                }
+            }
+            catch (Exception)
+            {
+                FirstNode = null;
+            }
         }
 
         #endregion
         #region ------------------------------------ METHODS -------------------------------------
-        
+
+        /// <summary>
+        /// Checks if the formula is in a syntactically correct, prefix notation. 
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public bool FormulaIsValid(string input)
+        {
+            // Store the number of brackets, commas, and negations.
+            MatchCollection openingBrackets = Regex.Matches(input, Regex.Escape("("));
+            int nrOfClosingBrackets = Regex.Matches(input, Regex.Escape(")")).Count;
+            int nrOfNegations = Regex.Matches(input, Regex.Escape("~")).Count;
+            int nrOfCommas = Regex.Matches(input, Regex.Escape(",")).Count;
+            string[] operators = {"~", ">", "=", "&", "|", "%" };
+            
+            // Check if there are brackets in the first place, and if so, if there's an equal number of opening and closing brackets. 
+            if (openingBrackets.Count > 0 && nrOfClosingBrackets > 0 && openingBrackets.Count == nrOfClosingBrackets)
+            {
+                // For every set of brackets, there needs to be a comma, EXCEPT if it's a negation.
+                if (openingBrackets.Count - nrOfNegations == nrOfCommas)
+                {
+                    // Assume every set of brackets has an operator.
+                    bool hasOperators = true;
+
+                    // Loop through the opening brackets.
+                    foreach (Capture openingBracket in openingBrackets)
+                    {
+                        // If an opening bracket is missing an operator, set the hasOperators variable to false.
+                        if (operators.Contains(input[openingBracket.Index - 1].ToString()) == false)
+                            hasOperators = false;
+                    }
+
+                    return hasOperators;
+                }
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Takes a formula in prefix notation and returns all variables as a list of strings.
         /// </summary>
@@ -60,7 +126,7 @@ namespace ALE1_2211082_ThomasVanIersel
             variables.Sort();
             return variables.Distinct().ToList();
         }
-
+        
         #region Internal formula tree
         /// <summary>
         /// Creates a tree of internal objects representing a formula in infix notation.
@@ -116,6 +182,10 @@ namespace ALE1_2211082_ThomasVanIersel
             {
                 // Once a left operand is found that is not another sub-formula, store its characters.
                 leftNode.Characters = leftOperand;
+                if (String.IsNullOrWhiteSpace(leftOperand) == false)
+                    Variables.Add(leftOperand);
+                else
+                    throw new Exception();
             }
             // Link the first found node (the operator) to its left operand as the first child.
             operatorNode.FirstChild = leftNode;
@@ -136,6 +206,10 @@ namespace ALE1_2211082_ThomasVanIersel
                 {
                     // Once a right operand is found that is not another sub-formula, store its characters.
                     rightNode.Characters = rightOperand;
+                    if (String.IsNullOrWhiteSpace(rightOperand) == false)
+                        Variables.Add(rightOperand);
+                    else
+                        throw new Exception();
                 }
                 // Link the first found node (the operator) to its right operand as the second child.
                 operatorNode.SecondChild = rightNode;
@@ -300,6 +374,9 @@ namespace ALE1_2211082_ThomasVanIersel
         {
             string disjunctiveNormalForm = "";
             List<string> trueRows = TruthTable.Where(r => r.Last() == '1').ToList();
+
+            if (trueRows.Count == 0)
+                return "Disjunctive normal form not possible. Formula is always false.";
             
             foreach (string row in trueRows)
             {
@@ -338,15 +415,31 @@ namespace ALE1_2211082_ThomasVanIersel
             for (int i = 0; i < row.Length - 1; i++)
             {
                 if (row[i]== '1')
+                {
                     disjunctiveNormalForm += Variables[i];
+                }
                 else
+                {
                     disjunctiveNormalForm += String.Format("~({0})", Variables[i]);
+                }
 
-                if (i != row.Length - 2)
-                    disjunctiveNormalForm += ", ";
+                if (i == row.Length - 3)
+                {
+                    disjunctiveNormalForm += ",";
+                }
+                else if (i == row.Length - 2)
+                {
+                    for (int j = 0; j < Variables.Count - 1; j++)
+                    {
+                        disjunctiveNormalForm += ")";
+                    }
+                }
+                else
+                {
+                    disjunctiveNormalForm += ",&(";
+                }
             }
-
-            disjunctiveNormalForm += ")";
+            
             return disjunctiveNormalForm;
         }
 
@@ -403,6 +496,7 @@ namespace ALE1_2211082_ThomasVanIersel
         }
 
         #endregion
+
         // End of Methods region
         #endregion
     }

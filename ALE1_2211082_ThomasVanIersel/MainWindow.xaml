@@ -16,8 +16,8 @@
 
 
         <Label Content="Formula (as prefix):" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="110"/>
-        <TabControl Height="427" Margin="10,82,12,0" VerticalAlignment="Top">
-            <TabItem Header="Different notations">
+        <TabControl x:Name="tcMain" Margin="10,82,12,9">
+            <TabItem x:Name="tabItemNotations" Header="Different notations">
                 <Grid Background="LightBlue">
                     <Label Content="Infix:" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="-1.092,-3.829" Height="26" Width="35" Margin="0,5,0,0"/>
                     <Label Content="Variables:" HorizontalAlignment="Left" Margin="0,30,0,0" VerticalAlignment="Top" Height="26" Width="60"/>
@@ -29,7 +29,7 @@
                     <TextBox x:Name="tbNandified" Height="189" Margin="5,200,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Graph" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
+            <TabItem x:Name="tabItemGraph" Header="Graph" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
                 <Grid Background="LightBlue">
                     <local:ZoomBorder x:Name="border" ClipToBounds="True">
                         <Image x:Name="graph" Height="359" Margin="0,30,10,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="525"/>
@@ -39,25 +39,25 @@
                     <Button x:Name="btnSetPath" Content="Set GraphViz path" HorizontalAlignment="Left" Margin="431,1,0,0" VerticalAlignment="Top" Width="104" Height="23" Click="btnSetPath_Click"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Truth table">
+            <TabItem x:Name="tabItemTruthTable" Header="Truth table">
                 <Grid Background="LightBlue">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="61*"/>
                         <ColumnDefinition Width="484*"/>
                     </Grid.ColumnDefinitions>
-                    <ListBox x:Name="truthTable" Margin="10,25,10,10" Grid.ColumnSpan="2"/>
-                    <Label Content="Truth table:" HorizontalAlignment="Left" Margin="10,-1,0,0" VerticalAlignment="Top" Height="26" Width="69" Grid.ColumnSpan="2"/>
-                    <Label x:Name="lblHashCode" Content="Hash code:" Margin="81,0,250,372" Grid.Column="1"/>
-                    <Label x:Name="lblHashCode_Copy" Content="Previous hash code:" Margin="234,0,97,372" Grid.Column="1"/>
+                    <ListBox x:Name="truthTable" Margin="10,45,10,3" Grid.ColumnSpan="2"/>
+                    <Label x:Name="lblHashCode" Content="Hash code:" Margin="10,0" Grid.ColumnSpan="2" Height="27" VerticalAlignment="Top"/>
+                    <Label x:Name="lblPreviousHashCode" Content="Previous hash code:" Margin="10,18,10,0" Grid.ColumnSpan="2" Height="27" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Simplify" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
+            <TabItem x:Name="tabItemSimplify" Header="Simplify" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
                 <Grid Background="LightBlue">
                     <TextBox x:Name="tbMinimised" Margin="10,25,10,10" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
                     <Label Content="Simplified:" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Height="26" Width="68"/>
                 </Grid>
             </TabItem>
         </TabControl>
+        <Button x:Name="btnHelp" Content="Help" Margin="0,3,12,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="38" Click="btnHelp_Click"/>
 
     </Grid>
 </Window>

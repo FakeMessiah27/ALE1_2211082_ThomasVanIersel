@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ALE1_2211082_ThomasVanIersel
 {
-    class Node
+    public class Node
     {
         public string Characters { get; set; }
 
