@@ -380,19 +380,24 @@ namespace ALE1_2211082_ThomasVanIersel
             
             foreach (string row in trueRows)
             {
+                // As long as we haven't reached the final row yet, we need to open up a new "|" operator for each new row.
                 if (row != trueRows.Last())
                 {
                     disjunctiveNormalForm += "|(";
                 }
 
+                // Inside the "|" operation, we place the disjunctive normal form of that row's sub-formula.
                 disjunctiveNormalForm += WriteAsDisjunctiveNormalForm(row);
                 
+                // And then, if we're not at the last row, we place a comma.
                 if (row != trueRows.Last())
                 {
                     disjunctiveNormalForm += ",";
                 }
                 else
                 {
+                    // Once we have reached (and added) the final row, add the required amount of closing brackets 
+                    // (this being equal to the amount of rows that evaluated to true.)
                     for (int i = 1; i < trueRows.Count; i++)
                     {
                         disjunctiveNormalForm += ")";
@@ -423,6 +428,13 @@ namespace ALE1_2211082_ThomasVanIersel
                     disjunctiveNormalForm += String.Format("~({0})", Variables[i]);
                 }
 
+                // row.Length - 1 is the truth value of the entire row and not a variable, so we're not interested in that one.
+                // row.Length - 2 is the last variable in the row.
+                // row.Length - 3 is the second to last variable in the row.
+                //
+                // Once we get to the second last variable, we no longer need another "&" operator, we just need a comma.
+                // Then, when we get to the final variable in the row (Length - 2), we need to place all the necessary closing
+                // brackets, which would be one for every variable, except for the last variable.
                 if (i == row.Length - 3)
                 {
                     disjunctiveNormalForm += ",";

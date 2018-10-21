@@ -62,35 +62,5 @@ namespace ALE1_2211082_ThomasVanIersel
                 return op;
             }
         }
-
-        //public string ToNandifiedString()
-        //{
-        //    string op = "";
-
-        //    switch (Characters)
-        //    {
-        //        case "~":
-                    
-        //            break;
-        //        case ">":
-                    
-        //            break;
-        //        case "=":
-                    
-        //            break;
-        //        case "&":
-                    
-        //            break;
-        //        case "|":
-                    
-        //            break;
-        //        default:
-        //            return Characters;
-        //    }
-
-
-
-            
-        //}
     }
 }

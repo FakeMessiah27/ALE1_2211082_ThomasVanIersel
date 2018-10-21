@@ -26,7 +26,7 @@
                     <Label Content="Disjunctive normal form:" HorizontalAlignment="Left" Margin="0,61,0,0" VerticalAlignment="Top" Height="26" Width="143"/>
                     <TextBox x:Name="tbDisNormal" Height="80" Margin="5,89,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
                     <Label Content="Nandified form:" HorizontalAlignment="Left" Margin="0,174,0,0" VerticalAlignment="Top" Height="26" Width="143"/>
-                    <TextBox x:Name="tbNandified" Height="189" Margin="5,200,10,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+                    <TextBox x:Name="tbNandified" Margin="5,200,10,10" TextWrapping="Wrap"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tabItemGraph" Header="Graph" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="54">
